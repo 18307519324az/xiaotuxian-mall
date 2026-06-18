@@ -1,0 +1,47 @@
+server:
+  port: 8106
+
+spring:
+  application:
+    name: xtx-inventory-service
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/xtx_inventory?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: ${DB_PASSWORD:change-me-local-dev-only}
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  cloud:
+    nacos:
+      discovery:
+        enabled: false
+
+    discovery:
+      client:
+        simple:
+          instances:
+            xtx-auth-service:
+              - uri: http://localhost:8101
+            xtx-cms-service:
+              - uri: http://localhost:8103
+            xtx-category-service:
+              - uri: http://localhost:8104
+            xtx-goods-service:
+              - uri: http://localhost:8105
+            xtx-inventory-service:
+              - uri: http://localhost:8106
+            xtx-cart-service:
+              - uri: http://localhost:8107
+            xtx-order-service:
+              - uri: http://localhost:8108
+            xtx-payment-service:
+              - uri: http://localhost:8109
+            xtx-member-service:
+              - uri: http://localhost:8110
+            xtx-logistics-service:
+              - uri: http://localhost:8111
+            xtx-comment-service:
+              - uri: http://localhost:8112

@@ -1,0 +1,135 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: xtx-gateway
+  cloud:
+    nacos:
+      discovery:
+        enabled: false
+
+    gateway:
+      routes:
+        # 认证服务（真实后端）
+        - id: xtx-auth
+          uri: http://localhost:8101
+          predicates:
+            - Path=/login,/login/code,/login/social/**,/register/check,/register/code
+          filters:
+            - StripPrefix=0
+          metadata:
+            source: auth
+
+        # 会员服务（真实后端）
+        - id: xtx-member
+          uri: http://localhost:8110
+          predicates:
+            - Path=/member/address,/member/address/**,/member/collect
+          filters:
+            - StripPrefix=0
+          metadata:
+            source: member
+
+        # 分类服务（真实后端）
+        - id: xtx-category
+          uri: http://localhost:8104
+          predicates:
+            - Path=/home/category/head,/category,/category/sub/filter,/category/goods/temporary
+          filters:
+            - StripPrefix=0
+          metadata:
+            source: category
+
+        # 商品服务（真实后端）
+        - id: xtx-goods
+          uri: http://localhost:8105
+          predicates:
+            - Path=/goods,/goods/sku/**,/goods/stock/**,/goods/relevant,/goods/hot
+          filters:
+            - StripPrefix=0
+          metadata:
+            source: goods
+
+        # 首页服务（真实后端）
+        - id: xtx-home
+          uri: http://localhost:8107
+          predicates:
+            - Path=/home/banner,/home/brand,/home/special,/home/goods,/home/new,/home/hot
+          filters:
+            - StripPrefix=0
+          metadata:
+            source: home
+
+        # 购物车服务（真实后端）
+        - id: xtx-cart
+          uri: http://localhost:8108
+          predicates:
+            - Path=/member/cart,/member/cart/**,/member/cart/merge
+          filters:
+            - StripPrefix=0
+          metadata:
+            source: cart
+
+        # Mock 服务（兜底：未匹配以上路由的请求由 Mock 处理）
+        - id: xtx-mock
+          uri: http://localhost:8099
+          predicates:
+            - Path=/**
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+
+xtx:
+  route:
+    # 分类服务路由来源: mock | real
+    category-source: real
+    # 商品服务路由来源: mock | real
+    goods-source: real
+    # 首页服务路由来源: mock | real
+    home-source: real
+    # 认证服务路由来源: mock | real
+    auth-source: real
+    # 会员服务路由来源: mock | real
+    member-source: real
+    # 购物车服务路由来源: mock | real
+    cart-source: real
+
+  jwt:
+    secret: ${JWT_SECRET:change-me-local-dev-only}
+    access-token-expire-minutes: 30
+    refresh-token-expire-days: 7
+    issuer: xtx-mall
+  security:
+    whitelist:
+      # 认证接口（无需登录）
+      - /login
+      - /login/code
+      - /login/social/**
+      - /register/check
+      - /register/code
+      # 浏览接口（无需登录）
+      - /home/**
+      - /category/**
+      - /home/category/head
+      - /category/sub/filter
+      - /category/goods/temporary
+      - /goods
+      - /goods/sku/**
+      - /goods/stock/**
+      - /goods/relevant
+      - /goods/hot
+      # 购物车接口（无需登录）
+      - /member/cart
+      - /member/cart/**
+      # 会员浏览接口（无需登录）
+      - /member/address
+      - /member/address/**
+      - /member/collect
+      # Mock 托管接口（无需登录）
+      - /member/order/**

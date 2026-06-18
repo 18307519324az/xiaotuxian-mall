@@ -1,0 +1,35 @@
+{
+  "name": "vue3-front",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
+    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build"
+  },
+  "dependencies": {
+    "@vueuse/core": "^4.9.0",
+    "axios": "^0.24.0",
+    "core-js": "^3.6.5",
+    "dayjs": "^1.10.7",
+    "mockjs": "^1.1.0",
+    "normalize.css": "^8.0.1",
+    "vee-validate": "~4.0.0",
+    "vue": "^3.0.0",
+    "vue-router": "~4.0.0",
+    "vuex": "^4.0.0-0",
+    "vuex-persistedstate": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.5.35",
+    "cross-env": "^10.1.0",
+    "less": "^3.0.4",
+    "less-loader": "^5.0.0",
+    "playwright": "^1.60.0",
+    "style-resources-loader": "^1.4.1",
+    "vue-cli-plugin-style-resources-loader": "~0.1.5"
+  }
+}
